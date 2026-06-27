@@ -6,8 +6,12 @@ import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { getReports, getAlerts, upvoteReport, confirmReport, Report, Alert } from "@/lib/dbService";
 import { Search, Filter, ThumbsUp, MapPin, AlertTriangle, Clock, ShieldAlert, Sparkles, CheckCircle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Dashboard() {
+  const t = useTranslations("dashboard");
+  const tCat = useTranslations("categories");
+  const tStatus = useTranslations("statuses");
   const { user } = useAuth();
   const [reports, setReports] = useState<Report[]>([]);
   const [alerts, setAlerts] = useState<Alert[]>([]);
@@ -81,27 +85,27 @@ export default function Dashboard() {
   });
 
   const categories = [
-    { value: "all", label: "All Categories" },
-    { value: "pothole", label: "Pothole / Road" },
-    { value: "garbage", label: "Garbage Overflow" },
-    { value: "water_leak", label: "Water Leak" },
-    { value: "broken_streetlight", label: "Streetlight" },
-    { value: "drainage", label: "Drainage / Sewer" },
-    { value: "flooding", label: "Flooding" },
-    { value: "fire", label: "Fire / Smoke" },
-    { value: "gas_leak", label: "Gas Leak" },
-    { value: "other", label: "Other" },
+    { value: "all", label: t("allCategories") },
+    { value: "pothole", label: tCat("pothole") },
+    { value: "garbage", label: tCat("garbage") },
+    { value: "water_leak", label: tCat("water_leak") },
+    { value: "broken_streetlight", label: tCat("broken_streetlight") },
+    { value: "drainage", label: tCat("drainage") },
+    { value: "flooding", label: tCat("flooding") },
+    { value: "fire", label: tCat("fire") },
+    { value: "gas_leak", label: tCat("gas_leak") },
+    { value: "other", label: tCat("other") },
   ];
 
   const statuses = [
-    { value: "all", label: "All Statuses" },
-    { value: "submitted", label: "Submitted" },
-    { value: "under_review", label: "Under Review" },
-    { value: "verified", label: "Verified" },
-    { value: "in_progress", label: "In Progress" },
-    { value: "resolved", label: "Resolved" },
-    { value: "rejected", label: "Rejected" },
-    { value: "duplicate", label: "Duplicate" },
+    { value: "all", label: t("allStatuses") },
+    { value: "submitted", label: tStatus("submitted") },
+    { value: "under_review", label: tStatus("under_review") },
+    { value: "verified", label: tStatus("verified") },
+    { value: "in_progress", label: tStatus("in_progress") },
+    { value: "resolved", label: tStatus("resolved") },
+    { value: "rejected", label: tStatus("rejected") },
+    { value: "duplicate", label: tStatus("duplicate") },
   ];
 
   const severityColors = {
@@ -112,13 +116,13 @@ export default function Dashboard() {
   };
 
   const statusLabels = {
-    submitted: "Submitted",
-    under_review: "Under Review",
-    verified: "Verified",
-    in_progress: "In Progress",
-    resolved: "Resolved",
-    rejected: "Rejected",
-    duplicate: "Duplicate",
+    submitted: tStatus("submitted"),
+    under_review: tStatus("under_review"),
+    verified: tStatus("verified"),
+    in_progress: tStatus("in_progress"),
+    resolved: tStatus("resolved"),
+    rejected: tStatus("rejected"),
+    duplicate: tStatus("duplicate"),
   };
 
   return (
@@ -143,13 +147,13 @@ export default function Dashboard() {
                   <div className="flex items-center justify-between gap-4">
                     <h4 className="font-bold text-white text-sm uppercase tracking-wider">{alert.title}</h4>
                     <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-danger text-white uppercase">
-                      Active Alert
+                      {t("activeAlert")}
                     </span>
                   </div>
                   <p className="text-xs text-gray-300 mt-1 leading-relaxed">{alert.message}</p>
                   {alert.safetyInstructions && (
                     <div className="mt-2 text-xs bg-black/30 p-2 rounded-lg text-brand-danger/90 font-mono">
-                      Safety Tip: {alert.safetyInstructions}
+                      {t("safetyTip")}{alert.safetyInstructions}
                     </div>
                   )}
                 </div>
@@ -161,14 +165,14 @@ export default function Dashboard() {
         {/* Dashboard Title & Quick Stats */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
           <div>
-            <h1 className="text-3xl font-extrabold tracking-tight text-white">Community Issues Dashboard</h1>
-            <p className="text-sm text-gray-400 mt-1">Review, support, and track local civic resolution progress.</p>
+            <h1 className="text-3xl font-extrabold tracking-tight text-white">{t("title")}</h1>
+            <p className="text-sm text-gray-400 mt-1">{t("subtitle")}</p>
           </div>
           <Link
             href="/report/new"
             className="self-start bg-brand-primary hover:bg-brand-primary/95 text-white font-semibold text-sm px-5 py-3 rounded-xl shadow-lg shadow-brand-primary/20 hover:scale-[1.02] transition-all"
           >
-            File a New Report
+            {t("fileReport")}
           </Link>
         </div>
 
@@ -180,19 +184,19 @@ export default function Dashboard() {
             <div className="glass-panel p-6 rounded-3xl space-y-6">
               <h3 className="text-sm font-bold text-white flex items-center gap-2">
                 <Filter className="h-4 w-4 text-brand-primary" />
-                Filter Issues
+                {t("filterIssues")}
               </h3>
 
               {/* Search */}
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Search</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t("search")}</label>
                 <div className="relative">
                   <Search className="absolute left-3 top-2.5 h-4 w-4 text-gray-500" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder="Search by keywords..."
+                    placeholder={t("searchPlaceholder")}
                     className="glass-input w-full pl-9 pr-3 py-2 text-xs rounded-xl"
                   />
                 </div>
@@ -200,7 +204,7 @@ export default function Dashboard() {
 
               {/* Category */}
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Category</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t("category")}</label>
                 <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
@@ -216,7 +220,7 @@ export default function Dashboard() {
 
               {/* Status */}
               <div className="space-y-2">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Status</label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t("status")}</label>
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
@@ -237,11 +241,11 @@ export default function Dashboard() {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 text-gray-500">
                 <div className="h-8 w-8 rounded-full border-2 border-brand-primary border-t-transparent animate-spin mb-4" />
-                <p className="text-xs">Loading reported issues...</p>
+                <p className="text-xs">{t("loading")}</p>
               </div>
             ) : filteredReports.length === 0 ? (
               <div className="glass-panel p-12 text-center rounded-3xl">
-                <p className="text-sm text-gray-400 font-light">No issues match your filter criteria.</p>
+                <p className="text-sm text-gray-400 font-light">{t("noResults")}</p>
                 <button
                   onClick={() => {
                     setSearchQuery("");
@@ -250,7 +254,7 @@ export default function Dashboard() {
                   }}
                   className="text-xs text-brand-primary font-semibold underline mt-3 hover:text-white"
                 >
-                  Reset all filters
+                  {t("resetFilters")}
                 </button>
               </div>
             ) : (
@@ -294,7 +298,7 @@ export default function Dashboard() {
                     <div className="mt-3 flex items-start gap-2 bg-brand-primary/5 p-3 rounded-2xl border border-brand-primary/10">
                       <Sparkles className="h-4 w-4 text-brand-primary shrink-0 mt-0.5" />
                       <p className="text-[11px] text-brand-primary/95 leading-relaxed font-light">
-                        <strong className="font-bold">AI Summary:</strong> {report.aiSummary}
+                        <strong className="font-bold">{t("aiSummary")}</strong> {report.aiSummary}
                       </p>
                     </div>
                   )}

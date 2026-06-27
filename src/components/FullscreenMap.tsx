@@ -6,6 +6,7 @@ import L from "leaflet";
 import Link from "next/link";
 import { Report } from "@/lib/dbService";
 import { Navigation, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // Helper to color pins depending on severity
 function createCustomPin(severity: "low" | "medium" | "high" | "critical") {
@@ -47,6 +48,7 @@ function MapRecenter({ position, zoom }: { position: [number, number]; zoom?: nu
 }
 
 export default function FullscreenMap({ reports }: FullscreenMapProps) {
+  const t = useTranslations("map");
   const [center, setCenter] = useState<[number, number]>([37.7749, -122.4194]);
   const [zoom, setZoom] = useState(13);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
@@ -60,7 +62,7 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
 
   const handleLocateMe = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
+      alert(t("geoNotSupported"));
       return;
     }
     setLoadingGps(true);
@@ -74,7 +76,7 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
       },
       (err) => {
         console.error(err);
-        alert("Failed to access your location. Please check browser permissions.");
+        alert(t("geoFailed"));
         setLoadingGps(false);
       },
       { enableHighAccuracy: true }
@@ -97,7 +99,7 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
           ) : (
             <Navigation className="h-3.5 w-3.5 text-brand-primary" />
           )}
-          <span>{loadingGps ? "Locating..." : "Locate Me"}</span>
+          <span>{loadingGps ? t("locating") : t("locateMe")}</span>
         </button>
       </div>
 
@@ -123,7 +125,7 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
             <Marker position={userLocation} icon={userPin}>
               <Popup>
                 <div className="p-1 text-center font-bold text-xs text-white">
-                  You Are Here
+                  {t("youAreHere")}
                 </div>
               </Popup>
             </Marker>
@@ -165,12 +167,12 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
                     )}
 
                     <div className="flex items-center justify-between border-t border-white/10 pt-2 text-[10px]">
-                      <span className="text-gray-500">Status: {report.status.replace("_", " ")}</span>
+                      <span className="text-gray-500">{t("status")}{report.status.replace("_", " ")}</span>
                       <Link
                         href={`/report?id=${report.id}`}
                         className="font-bold text-brand-primary hover:underline"
                       >
-                        View Timeline
+                        {t("viewTimeline")}
                       </Link>
                     </div>
                   </div>

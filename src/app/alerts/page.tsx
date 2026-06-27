@@ -4,8 +4,10 @@ import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { getAlerts, Alert } from "@/lib/dbService";
 import { AlertTriangle, Clock, ShieldAlert, Sparkles, BellRing, BellOff, Volume2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AlertsPage() {
+  const t = useTranslations("alerts");
   const [alerts, setAlerts] = useState<Alert[]>([]);
   const [loading, setLoading] = useState(true);
   const [subscribed, setSubscribed] = useState(false);
@@ -46,9 +48,9 @@ export default function AlertsPage() {
           <div>
             <h1 className="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2.5">
               <ShieldAlert className="h-8 w-8 text-brand-danger animate-pulse" />
-              Emergency Broadcast Center
+              {t("title")}
             </h1>
-            <p className="text-sm text-gray-400 mt-1">Official verified local crisis alerts and active municipal safety warnings.</p>
+            <p className="text-sm text-gray-400 mt-1">{t("subtitle")}</p>
           </div>
 
           {/* Sub widget */}
@@ -63,12 +65,12 @@ export default function AlertsPage() {
             {subscribed ? (
               <>
                 <BellRing className="h-4 w-4 shrink-0" />
-                <span>Alerts Enabled</span>
+                <span>{t("alertsEnabled")}</span>
               </>
             ) : (
               <>
                 <BellOff className="h-4 w-4 shrink-0" />
-                <span>Subscribe to Alerts</span>
+                <span>{t("subscribeToAlerts")}</span>
               </>
             )}
           </button>
@@ -78,15 +80,15 @@ export default function AlertsPage() {
         {loading ? (
           <div className="flex flex-col items-center justify-center py-20 text-gray-500">
             <div className="h-8 w-8 rounded-full border-2 border-brand-primary border-t-transparent animate-spin mb-4" />
-            <p className="text-xs">Connecting to emergency broadcast stream...</p>
+            <p className="text-xs">{t("loading")}</p>
           </div>
         ) : alerts.length === 0 ? (
           <div className="glass-panel p-12 text-center rounded-3xl space-y-4">
             <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-success/10 text-brand-success">
               <Volume2 className="h-6 w-6" />
             </div>
-            <h3 className="font-bold text-white text-base">All Systems Normal</h3>
-            <p className="text-xs text-gray-400 font-light max-w-sm mx-auto">There are currently no active emergency alerts or crisis warning broadcasts in your area.</p>
+            <h3 className="font-bold text-white text-base">{t("allNormal")}</h3>
+            <p className="text-xs text-gray-400 font-light max-w-sm mx-auto">{t("allNormalDesc")}</p>
           </div>
         ) : (
           <div className="space-y-6">
@@ -109,11 +111,11 @@ export default function AlertsPage() {
                 <div className="pl-2 space-y-4">
                   <div className="flex items-center justify-between gap-4 flex-wrap">
                     <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider bg-white/5 border border-white/10 px-2 py-0.5 rounded-lg text-gray-300">
-                      Emergency Alert
+                      {t("emergencyAlert")}
                     </span>
                     <span className="flex items-center gap-1.5 text-xs text-gray-500">
                       <Clock className="h-3.5 w-3.5" />
-                      <span>Expires: {new Date(alert.expiresAt).toLocaleTimeString()}</span>
+                      <span>{t("expires")}{new Date(alert.expiresAt).toLocaleTimeString()}</span>
                     </span>
                   </div>
 
@@ -125,7 +127,7 @@ export default function AlertsPage() {
                     <div className="bg-black/30 p-4 rounded-2xl border border-white/5 flex gap-3 items-start">
                       <Sparkles className="h-5 w-5 text-brand-danger shrink-0 mt-0.5" />
                       <div>
-                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">Safety Instruction</h4>
+                        <h4 className="text-xs font-bold text-white uppercase tracking-wider">{t("safetyInstruction")}</h4>
                         <p className="text-xs text-gray-300 mt-1 font-mono leading-relaxed">{alert.safetyInstructions}</p>
                       </div>
                     </div>

@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents, useMap } from "react-leaflet";
 import L from "leaflet";
 import { Navigation, Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 // Fix default marker icon compilation bugs in Next.js
 const markerIcon = new L.Icon({
@@ -43,6 +44,7 @@ function MapRecenter({ position }: { position: { lat: number; lng: number } }) {
 }
 
 export default function MapSelector({ position, onChange }: MapSelectorProps) {
+  const t = useTranslations("newReport");
   const [markerPos, setMarkerPos] = useState(position);
   const [loadingGps, setLoadingGps] = useState(false);
   const markerRef = useRef<any>(null);
@@ -70,7 +72,7 @@ export default function MapSelector({ position, onChange }: MapSelectorProps) {
 
   const handleUseGps = () => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser.");
+      alert(t("geoNotSupported"));
       return;
     }
     setLoadingGps(true);
@@ -84,7 +86,7 @@ export default function MapSelector({ position, onChange }: MapSelectorProps) {
       },
       (err) => {
         console.error(err);
-        alert("Failed to fetch GPS coordinates. Please grant location permissions.");
+        alert(t("geoFailed"));
         setLoadingGps(false);
       },
       { enableHighAccuracy: true }
@@ -108,7 +110,7 @@ export default function MapSelector({ position, onChange }: MapSelectorProps) {
           ) : (
             <Navigation className="h-3.5 w-3.5 text-brand-primary" />
           )}
-          <span>{loadingGps ? "Locating..." : "Use Live GPS"}</span>
+          <span>{loadingGps ? "Locating..." : t("useLiveGps")}</span>
         </button>
       </div>
 

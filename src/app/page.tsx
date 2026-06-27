@@ -5,8 +5,12 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { getReports, getAlerts, Report, Alert } from "@/lib/dbService";
 import { ShieldAlert, Users, Award, Landmark, ArrowRight, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Home() {
+  const t = useTranslations("home");
+  const tStats = useTranslations("stats");
+  const tFeatures = useTranslations("features");
   const [stats, setStats] = useState({
     totalReports: 0,
     resolvedCount: 0,
@@ -49,15 +53,15 @@ export default function Home() {
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-brand-primary/10 text-brand-primary border border-brand-primary/20 mb-6 uppercase tracking-wider animate-pulse">
               <ShieldAlert className="h-3.5 w-3.5" />
-              Connected Civic Action Platform
+              {t("badge")}
             </div>
 
             <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-gray-100 to-gray-400 bg-clip-text text-transparent max-w-4xl mx-auto leading-[1.15]">
-              Resolve Civic Hazards, Empower Communities
+              {t("hero")}
             </h1>
             
             <p className="mt-6 text-base sm:text-lg text-gray-400 max-w-2xl mx-auto font-light leading-relaxed">
-              CivicPulse AI combines citizen reporting with Google Gemini AI to categorize, summarize, and resolve municipal hazards like broken water pipes, potholes, and critical safety emergencies.
+              {t("subtitle")}
             </p>
 
             <div className="mt-10 flex flex-wrap justify-center gap-4">
@@ -65,14 +69,14 @@ export default function Home() {
                 href="/report/new"
                 className="flex items-center gap-2 bg-gradient-to-r from-brand-primary to-brand-secondary hover:brightness-105 text-white font-semibold px-8 py-4 rounded-2xl shadow-xl shadow-brand-primary/25 hover:shadow-brand-primary/35 hover:scale-[1.02] transition-all duration-300"
               >
-                Report a Local Issue
+                {t("reportBtn")}
                 <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 href="/dashboard"
                 className="text-sm font-semibold text-gray-300 hover:text-white border border-white/10 hover:border-white/20 px-8 py-4 rounded-2xl bg-white/5 backdrop-blur-md transition-all"
               >
-                View Dashboard
+                {t("viewDashboard")}
               </Link>
             </div>
           </div>
@@ -88,7 +92,7 @@ export default function Home() {
                     <AlertTriangle className="h-5 w-5" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-white text-sm uppercase tracking-wider">Active Local Emergencies ({alerts.length})</h3>
+                    <h3 className="font-bold text-white text-sm uppercase tracking-wider">{t("activeEmergencies", { count: alerts.length })}</h3>
                     <p className="text-xs text-brand-danger/90 mt-0.5">{alerts[0].title}: {alerts[0].message}</p>
                   </div>
                 </div>
@@ -96,7 +100,7 @@ export default function Home() {
                   href="/alerts"
                   className="text-xs font-bold text-white underline hover:text-brand-danger transition-all"
                 >
-                  View Emergency Safety Alerts &rarr;
+                  {t("viewAlerts")}
                 </Link>
               </div>
             </div>
@@ -112,12 +116,12 @@ export default function Home() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-primary/10 text-brand-primary mb-6">
                     <ShieldAlert className="h-6 w-6" />
                   </div>
-                  <h3 className="text-gray-400 text-sm font-semibold tracking-wide uppercase">Reported Hazards</h3>
+                  <h3 className="text-gray-400 text-sm font-semibold tracking-wide uppercase">{tStats("reportedHazards")}</h3>
                   <p className="text-4xl font-extrabold text-white mt-2">
                     {loading ? "..." : stats.totalReports}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-4">Hazards submitted and tracked by the community</p>
+                <p className="text-xs text-gray-500 mt-4">{tStats("reportedHazardsDesc")}</p>
               </div>
 
               <div className="glass-panel p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between">
@@ -125,12 +129,12 @@ export default function Home() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-success/10 text-brand-success mb-6">
                     <CheckCircle2 className="h-6 w-6" />
                   </div>
-                  <h3 className="text-gray-400 text-sm font-semibold tracking-wide uppercase">Resolved Complaints</h3>
+                  <h3 className="text-gray-400 text-sm font-semibold tracking-wide uppercase">{tStats("resolvedComplaints")}</h3>
                   <p className="text-4xl font-extrabold text-white mt-2">
                     {loading ? "..." : stats.resolvedCount}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-4">Verified resolutions and repaired municipal facilities</p>
+                <p className="text-xs text-gray-500 mt-4">{tStats("resolvedComplaintsDesc")}</p>
               </div>
 
               <div className="glass-panel p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between">
@@ -138,12 +142,12 @@ export default function Home() {
                   <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-danger/10 text-brand-danger mb-6">
                     <AlertTriangle className="h-6 w-6" />
                   </div>
-                  <h3 className="text-gray-400 text-sm font-semibold tracking-wide uppercase">Active Emergencies</h3>
+                  <h3 className="text-gray-400 text-sm font-semibold tracking-wide uppercase">{tStats("activeEmergencies")}</h3>
                   <p className="text-4xl font-extrabold text-white mt-2">
                     {loading ? "..." : stats.activeCrisisCount}
                   </p>
                 </div>
-                <p className="text-xs text-gray-500 mt-4">Critical warnings broadcasted by city administrators</p>
+                <p className="text-xs text-gray-500 mt-4">{tStats("activeEmergenciesDesc")}</p>
               </div>
             </div>
           </div>
@@ -153,8 +157,8 @@ export default function Home() {
         <section className="py-20 bg-black/20 border-t border-white/5">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-16">
-              <h2 className="text-3xl font-extrabold text-white">How CivicPulse AI Works</h2>
-              <p className="text-gray-400 mt-4 font-light">Advanced AI routing combined with trust-driven community validations.</p>
+              <h2 className="text-3xl font-extrabold text-white">{t("howItWorks")}</h2>
+              <p className="text-gray-400 mt-4 font-light">{t("howItWorksSub")}</p>
             </div>
 
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
@@ -162,9 +166,9 @@ export default function Home() {
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-primary to-brand-secondary text-white shadow-xl shadow-brand-primary/10 mb-6">
                   <Users className="h-7 w-7" />
                 </div>
-                <h3 className="text-lg font-bold text-white">1. Citizen Submission</h3>
+                <h3 className="text-lg font-bold text-white">{tFeatures("step1Title")}</h3>
                 <p className="text-gray-400 mt-3 text-sm font-light leading-relaxed">
-                  Citizens submit reports with pictures and GPS coordinates. Gemini AI compiles user inputs into a structured summaries instantly.
+                  {tFeatures("step1Desc")}
                 </p>
               </div>
 
@@ -172,9 +176,9 @@ export default function Home() {
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-secondary to-purple-600 text-white shadow-xl shadow-purple-600/10 mb-6">
                   <Award className="h-7 w-7" />
                 </div>
-                <h3 className="text-lg font-bold text-white">2. AI Validation & Deduplication</h3>
+                <h3 className="text-lg font-bold text-white">{tFeatures("step2Title")}</h3>
                 <p className="text-gray-400 mt-3 text-sm font-light leading-relaxed">
-                  Our system detects duplicates using distance matrices and semantic comparison, categorizing and routing to correct departments.
+                  {tFeatures("step2Desc")}
                 </p>
               </div>
 
@@ -182,9 +186,9 @@ export default function Home() {
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-success to-emerald-700 text-white shadow-xl shadow-brand-success/10 mb-6">
                   <Landmark className="h-7 w-7" />
                 </div>
-                <h3 className="text-lg font-bold text-white">3. Resolution & Alerts</h3>
+                <h3 className="text-lg font-bold text-white">{tFeatures("step3Title")}</h3>
                 <p className="text-gray-400 mt-3 text-sm font-light leading-relaxed">
-                  Admins assign, verify, and resolve issues, while publishing high-priority safety alert banners for urgent community warnings.
+                  {tFeatures("step3Desc")}
                 </p>
               </div>
             </div>
@@ -194,7 +198,7 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="py-8 border-t border-white/5 bg-black/40 text-center text-xs text-gray-500">
-        <p>&copy; {new Date().getFullYear()} CivicPulse AI. Developed for civic resolution and smart city emergency management.</p>
+        <p>&copy; {new Date().getFullYear()} {t("footer")}</p>
       </footer>
     </div>
   );

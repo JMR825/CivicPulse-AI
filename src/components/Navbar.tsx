@@ -6,8 +6,10 @@ import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { getAlerts, Alert } from "@/lib/dbService";
 import { ShieldAlert, AlertTriangle, Map, LayoutDashboard, PlusCircle, User, LogOut, ChevronDown, Settings } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function Navbar() {
+  const t = useTranslations("nav");
   const { user, signOutUser, changeRole } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
@@ -42,10 +44,10 @@ export default function Navbar() {
   };
 
   const navItems = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Crisis Map", href: "/map", icon: Map },
+    { name: t("dashboard"), href: "/dashboard", icon: LayoutDashboard },
+    { name: t("map"), href: "/map", icon: Map },
     {
-      name: "Alerts",
+      name: t("alerts"),
       href: "/alerts",
       icon: AlertTriangle,
       badge: activeAlertCount > 0 ? activeAlertCount : undefined,
@@ -119,10 +121,10 @@ export default function Navbar() {
                   </button>
                   {roleMenuOpen && (
                     <div className="absolute right-0 mt-2 w-40 origin-top-right rounded-xl border border-white/5 bg-brand-card p-1 shadow-2xl backdrop-blur-xl animate-in fade-in slide-in-from-top-2 duration-150">
-                      <div className="px-2 py-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">Switch Role (Demo)</div>
-                      <button onClick={() => selectRole("citizen")} className="flex w-full items-center px-3 py-2 text-xs text-gray-300 hover:bg-white/5 rounded-lg">Citizen</button>
-                      <button onClick={() => selectRole("moderator")} className="flex w-full items-center px-3 py-2 text-xs text-gray-300 hover:bg-white/5 rounded-lg">Moderator</button>
-                      <button onClick={() => selectRole("admin")} className="flex w-full items-center px-3 py-2 text-xs text-gray-300 hover:bg-white/5 rounded-lg">Admin</button>
+                      <div className="px-2 py-1 text-[10px] font-bold text-gray-500 uppercase tracking-wider">{t("switchRole")}</div>
+                      <button onClick={() => selectRole("citizen")} className="flex w-full items-center px-3 py-2 text-xs text-gray-300 hover:bg-white/5 rounded-lg">{t("citizen")}</button>
+                      <button onClick={() => selectRole("moderator")} className="flex w-full items-center px-3 py-2 text-xs text-gray-300 hover:bg-white/5 rounded-lg">{t("moderator")}</button>
+                      <button onClick={() => selectRole("admin")} className="flex w-full items-center px-3 py-2 text-xs text-gray-300 hover:bg-white/5 rounded-lg">{t("admin")}</button>
                     </div>
                   )}
                 </div>
@@ -137,7 +139,7 @@ export default function Navbar() {
                         : "border-white/10 text-gray-300 hover:text-white hover:bg-white/5"
                     }`}
                   >
-                    <span>Admin Panel</span>
+                    <span>{t("adminPanel")}</span>
                   </Link>
                 )}
 
@@ -147,7 +149,7 @@ export default function Navbar() {
                   className="flex items-center gap-1.5 bg-brand-primary hover:bg-brand-primary/95 text-white font-semibold text-sm px-4 py-2 rounded-xl shadow-lg shadow-brand-primary/20 hover:shadow-brand-primary/30 hover:scale-[1.02] transition-all"
                 >
                   <PlusCircle className="h-4 w-4" />
-                  <span className="hidden sm:inline">Report Issue</span>
+                  <span className="hidden sm:inline">{t("reportIssue")}</span>
                 </Link>
 
                 {/* User Dropdown */}
@@ -175,14 +177,14 @@ export default function Navbar() {
                         className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-gray-300 hover:bg-white/5 rounded-xl transition-all"
                       >
                         <Settings className="h-4 w-4 text-gray-400" />
-                        <span>Settings</span>
+                        <span>{t("settings")}</span>
                       </Link>
                       <button
                         onClick={handleSignOut}
                         className="flex w-full items-center gap-2 px-3 py-2.5 text-sm text-brand-danger hover:bg-brand-danger/10 rounded-xl transition-all"
                       >
                         <LogOut className="h-4 w-4" />
-                        <span>Sign Out</span>
+                        <span>{t("signOut")}</span>
                       </button>
                     </div>
                   )}
@@ -193,7 +195,7 @@ export default function Navbar() {
                 href="/auth"
                 className="text-sm font-semibold text-gray-300 hover:text-white border border-white/10 hover:border-white/20 px-4 py-2 rounded-xl bg-white/5 transition-all"
               >
-                Sign In
+                {t("signIn")}
               </Link>
             )}
           </div>

@@ -38,7 +38,26 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${outfit.variable} ${inter.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var lang = localStorage.getItem('civicpulse_lang');
+                  if (lang) document.documentElement.lang = lang;
+                  var contrast = localStorage.getItem('civicpulse_contrast');
+                  if (contrast === 'true') document.documentElement.classList.add('high-contrast');
+                  var largeText = localStorage.getItem('civicpulse_largetext');
+                  if (largeText === 'true') document.documentElement.classList.add('large-text');
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col bg-brand-bg text-gray-100 font-sans selection:bg-brand-primary/30 selection:text-white">
         <Providers>{children}</Providers>
       </body>

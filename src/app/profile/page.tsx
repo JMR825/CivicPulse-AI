@@ -6,11 +6,15 @@ import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { getReports, Report } from "@/lib/dbService";
 import { User, Shield, MapPin, Eye, Volume2, Award, Settings, CheckCircle2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function ProfilePage() {
   const { user } = useAuth();
   const [userReports, setUserReports] = useState<Report[]>([]);
   const [loading, setLoading] = useState(true);
+
+  const t = useTranslations("profile");
+  const tBadge = useTranslations("badges");
 
   // Settings states
   const [language, setLanguage] = useState("en");
@@ -66,9 +70,9 @@ export default function ProfilePage() {
     setLargeText(next);
     localStorage.setItem("civicpulse_largetext", String(next));
     if (next) {
-      document.documentElement.classList.add("text-lg");
+      document.documentElement.classList.add("large-text");
     } else {
-      document.documentElement.classList.remove("text-lg");
+      document.documentElement.classList.remove("large-text");
     }
   };
 
@@ -78,10 +82,10 @@ export default function ProfilePage() {
         <Navbar />
         <div className="flex-1 flex flex-col items-center justify-center py-20 text-center">
           <User className="h-12 w-12 text-gray-500 mb-4" />
-          <h2 className="text-xl font-bold">Authentication Required</h2>
-          <p className="text-sm text-gray-400 mt-2">Please sign in to access your profile and settings.</p>
+          <h2 className="text-xl font-bold">{t("authRequired")}</h2>
+          <p className="text-sm text-gray-400 mt-2">{t("authRequiredDesc")}</p>
           <Link href="/auth" className="bg-brand-primary text-white text-xs font-semibold px-5 py-2.5 rounded-xl mt-6">
-            Sign In Now
+            {t("signInNow")}
           </Link>
         </div>
       </div>
@@ -91,9 +95,9 @@ export default function ProfilePage() {
   // Badges logic
   const count = userReports.length;
   const badges = [
-    { name: "Safety Sentinel", desc: "Reported 1+ verified civic hazard", unlocked: count >= 1, icon: Shield },
-    { name: "Community Guardian", desc: "Reported 3+ hazards", unlocked: count >= 3, icon: Award },
-    { name: "Watch Captain", desc: "Achieved a Trust Score &gt; 80", unlocked: user.trustScore >= 80, icon: CheckCircle2 },
+    { name: tBadge("safetySentinel"), desc: tBadge("safetySentinelDesc"), unlocked: count >= 1, icon: Shield },
+    { name: tBadge("communityGuardian"), desc: tBadge("communityGuardianDesc"), unlocked: count >= 3, icon: Award },
+    { name: tBadge("watchCaptain"), desc: tBadge("watchCaptainDesc"), unlocked: user.trustScore >= 80, icon: CheckCircle2 },
   ];
 
   return (
@@ -115,10 +119,10 @@ export default function ProfilePage() {
               <p className="text-xs text-gray-400 mt-1">{user.email}</p>
               <div className="flex items-center gap-2 mt-3">
                 <span className="text-[10px] font-bold uppercase bg-brand-primary/10 border border-brand-primary/20 text-brand-primary px-2.5 py-0.5 rounded-full">
-                  Role: {user.role}
+                  {t("role")} {user.role}
                 </span>
                 <span className="text-[10px] font-bold uppercase bg-brand-success/10 border border-brand-success/20 text-brand-success px-2.5 py-0.5 rounded-full">
-                  Trust Score: {user.trustScore}
+                  {t("trustScore")} {user.trustScore}
                 </span>
               </div>
             </div>
@@ -128,11 +132,11 @@ export default function ProfilePage() {
           <div className="flex gap-8 border-t md:border-t-0 md:border-l border-white/10 pt-4 md:pt-0 md:pl-8">
             <div className="text-center">
               <span className="text-3xl font-extrabold text-white">{userReports.length}</span>
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">My Reports</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">{t("myReports")}</p>
             </div>
             <div className="text-center">
               <span className="text-3xl font-extrabold text-white">{user.trustScore * 2}</span>
-              <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">XP Points</p>
+              <p className="text-[10px] text-gray-500 uppercase tracking-widest mt-1">{t("xpPoints")}</p>
             </div>
           </div>
         </div>
@@ -144,12 +148,12 @@ export default function ProfilePage() {
           <div className="glass-panel p-6 rounded-3xl space-y-6">
             <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/5 pb-3">
               <Settings className="h-4.5 w-4.5 text-brand-primary" />
-              App Preferences
+              {t("appPreferences")}
             </h3>
 
             {/* Language */}
             <div className="space-y-2">
-              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">Language</label>
+              <label className="text-[10px] font-bold text-gray-400 uppercase tracking-wider block">{t("language")}</label>
               <select
                 value={language}
                 onChange={(e) => updateLanguage(e.target.value)}
@@ -166,7 +170,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between py-2 border-t border-white/5">
               <div className="flex items-center gap-2">
                 <Eye className="h-4 w-4 text-gray-400" />
-                <span className="text-xs text-gray-300">High Contrast Mode</span>
+                <span className="text-xs text-gray-300">{t("highContrast")}</span>
               </div>
               <button
                 onClick={toggleContrast}
@@ -186,7 +190,7 @@ export default function ProfilePage() {
             <div className="flex items-center justify-between py-2 border-t border-white/5">
               <div className="flex items-center gap-2">
                 <Volume2 className="h-4 w-4 text-gray-400" />
-                <span className="text-xs text-gray-300">Large Text Mode</span>
+                <span className="text-xs text-gray-300">{t("largeText")}</span>
               </div>
               <button
                 onClick={toggleLargeText}
@@ -207,7 +211,7 @@ export default function ProfilePage() {
           <div className="glass-panel p-6 rounded-3xl space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/5 pb-3">
               <Award className="h-4.5 w-4.5 text-brand-primary" />
-              Civic Badges
+              {t("civicBadges")}
             </h3>
             
             <div className="space-y-4">
@@ -231,9 +235,9 @@ export default function ProfilePage() {
                       <h4 className="text-xs font-bold">{badge.name}</h4>
                       <p className="text-[10px] text-gray-400 mt-0.5">{badge.desc}</p>
                       {badge.unlocked ? (
-                        <span className="text-[8px] uppercase tracking-wider font-bold text-brand-success mt-1 block">Unlocked</span>
+                        <span className="text-[8px] uppercase tracking-wider font-bold text-brand-success mt-1 block">{t("unlocked")}</span>
                       ) : (
-                        <span className="text-[8px] uppercase tracking-wider font-bold text-gray-500 mt-1 block">Locked</span>
+                        <span className="text-[8px] uppercase tracking-wider font-bold text-gray-500 mt-1 block">{t("locked")}</span>
                       )}
                     </div>
                   </div>
@@ -246,14 +250,14 @@ export default function ProfilePage() {
           <div className="glass-panel p-6 rounded-3xl space-y-4">
             <h3 className="text-sm font-bold text-white flex items-center gap-2 border-b border-white/5 pb-3">
               <MapPin className="h-4.5 w-4.5 text-brand-primary" />
-              Report History
+              {t("reportHistory")}
             </h3>
 
             <div className="space-y-3 max-h-80 overflow-y-auto pr-1">
               {loading ? (
-                <p className="text-xs text-gray-500">Loading history...</p>
+                <p className="text-xs text-gray-500">{t("loadingHistory")}</p>
               ) : userReports.length === 0 ? (
-                <p className="text-xs text-gray-500 font-light">You have not submitted any civic reports yet.</p>
+                <p className="text-xs text-gray-500 font-light">{t("noReports")}</p>
               ) : (
                 userReports.map((r) => (
                   <Link

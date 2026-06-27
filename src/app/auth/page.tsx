@@ -4,9 +4,11 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
-import { ShieldAlert, Mail, Lock, LogIn, Sparkles } from "lucide-react";
+import { ShieldAlert, Mail, Lock, LogIn } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export default function AuthPage() {
+  const t = useTranslations("auth");
   const { user, signInWithEmail, signUpWithEmail, signInWithGoogle } = useAuth();
   const router = useRouter();
   const [isSignUp, setIsSignUp] = useState(false);
@@ -35,7 +37,7 @@ export default function AuthPage() {
       router.push("/dashboard");
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Failed to authenticate. Please check your credentials.");
+      setError(err.message || t("authFailed"));
     } finally {
       setLoadingState(false);
     }
@@ -49,7 +51,7 @@ export default function AuthPage() {
       router.push("/dashboard");
     } catch (err: any) {
       console.error(err);
-      setError(err.message || "Google Sign-In failed.");
+      setError(err.message || t("googleFailed"));
     } finally {
       setLoadingState(false);
     }
@@ -70,10 +72,10 @@ export default function AuthPage() {
                 <ShieldAlert className="h-6 w-6" />
               </div>
               <h2 className="text-2xl font-bold tracking-tight text-white">
-                {isSignUp ? "Create a Civic Account" : "Access CivicPulse AI"}
+                {isSignUp ? t("createAccount") : t("signInTitle")}
               </h2>
               <p className="text-sm text-gray-400 mt-2 font-light">
-                {isSignUp ? "Join your local community resolution network" : "Sign in to submit and track civic hazards"}
+                {isSignUp ? t("joinNetwork") : t("signInSubtitle")}
               </p>
             </div>
 
@@ -86,7 +88,7 @@ export default function AuthPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                  Email Address
+                  {t("emailAddress")}
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
@@ -106,7 +108,7 @@ export default function AuthPage() {
 
               <div>
                 <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">
-                  Password
+                  {t("password")}
                 </label>
                 <div className="relative">
                   <span className="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-500">
@@ -131,7 +133,7 @@ export default function AuthPage() {
                 suppressHydrationWarning={true}
               >
                 <LogIn className="h-4 w-4" />
-                <span>{loadingState ? "Authenticating..." : isSignUp ? "Sign Up" : "Sign In"}</span>
+                <span>{loadingState ? t("authenticating") : isSignUp ? t("signUp") : t("signIn")}</span>
               </button>
             </form>
 
@@ -141,7 +143,7 @@ export default function AuthPage() {
                 <div className="w-full border-t border-white/5" />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="bg-[#0e1422] px-2 text-gray-500 uppercase tracking-wider">Or continue with</span>
+                <span className="bg-[#0e1422] px-2 text-gray-500 uppercase tracking-wider">{t("orContinueWith")}</span>
               </div>
             </div>
 
@@ -153,11 +155,11 @@ export default function AuthPage() {
               suppressHydrationWarning={true}
             >
               <img
-                src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/action/google.svg"
+                src="/google.svg"
                 alt="Google Logo"
                 className="h-5 w-5"
               />
-              <span>Google Sign-In</span>
+              <span>{t("googleSignIn")}</span>
             </button>
 
             {/* Toggle Sign Up / Sign In */}
@@ -167,19 +169,12 @@ export default function AuthPage() {
                 className="hover:text-brand-primary underline transition-all"
                 suppressHydrationWarning={true}
               >
-                {isSignUp ? "Already have an account? Sign In" : "Don't have an account? Sign Up"}
+                {isSignUp ? t("alreadyHaveAccount") : t("noAccount")}
               </button>
             </div>
           </div>
 
-          {/* Quick Demo Helper Box */}
-          <div className="mt-6 p-4 rounded-2xl bg-white/5 border border-white/5 text-xs text-gray-400 flex gap-3">
-            <Sparkles className="h-5 w-5 text-brand-warning shrink-0" />
-            <div>
-              <span className="font-bold text-white block mb-0.5">Quick Demo Tip:</span>
-              Use <code className="text-brand-primary bg-brand-primary/10 px-1 py-0.5 rounded">admin@civicpulse.gov</code> (any password) to log in directly as an <strong className="text-white">Admin</strong>. Use other emails for standard citizen accounts.
-            </div>
-          </div>
+
         </div>
       </div>
     </div>

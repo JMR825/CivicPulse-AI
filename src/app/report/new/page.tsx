@@ -7,21 +7,23 @@ import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { createReport, Report } from "@/lib/dbService";
 import { analyzeReport } from "@/lib/gemini";
+import { useTranslations } from "next-intl";
 import { Sparkles, MapPin, Upload, ArrowLeft, ArrowRight, CheckCircle, ShieldAlert, AlertCircle, FileText, Image as ImageIcon } from "lucide-react";
-
-// Load MapSelector dynamically to prevent SSR errors
-const MapSelector = dynamic(() => import("@/components/MapSelector"), {
-  ssr: false,
-  loading: () => (
-    <div className="h-64 w-full rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-xs text-gray-500">
-      Loading interactive map selector...
-    </div>
-  ),
-});
 
 export default function NewReport() {
   const { user } = useAuth();
   const router = useRouter();
+  const t = useTranslations("newReport");
+
+  // Load MapSelector dynamically to prevent SSR errors
+  const MapSelector = dynamic(() => import("@/components/MapSelector"), {
+    ssr: false,
+    loading: () => (
+      <div className="h-64 w-full rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-xs text-gray-500">
+        {t("loading")}
+      </div>
+    ),
+  });
 
   // Multi-step state: 1 = Form details, 2 = AI Preview
   const [step, setStep] = useState(1);
@@ -135,41 +137,41 @@ export default function NewReport() {
         
         {/* Step Indicator */}
         <div className="flex items-center justify-between mb-8 text-xs font-semibold text-gray-500 uppercase tracking-widest border-b border-white/5 pb-4">
-          <span className={step === 1 ? "text-brand-primary font-bold" : ""}>1. Report Details</span>
+          <span className={step === 1 ? "text-brand-primary font-bold" : ""}>{t("step1")}</span>
           <ArrowRight className="h-3 w-3" />
-          <span className={step === 2 ? "text-brand-primary font-bold" : ""}>2. AI Pre-Verification</span>
+          <span className={step === 2 ? "text-brand-primary font-bold" : ""}>{t("step2")}</span>
         </div>
 
         {/* Step 1: Input details */}
         {step === 1 && (
           <form onSubmit={handleAnalyzeClick} className="space-y-6">
             <div>
-              <h1 className="text-3xl font-extrabold text-white tracking-tight">Report a Local Hazard</h1>
-              <p className="text-sm text-gray-400 mt-1">Provide coordinates, pictures, and details of the civic issue.</p>
+              <h1 className="text-3xl font-extrabold text-white tracking-tight">{t("title")}</h1>
+              <p className="text-sm text-gray-400 mt-1">{t("subtitle")}</p>
             </div>
 
             {/* Title */}
             <div className="space-y-2">
-              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Issue Title</label>
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider">{t("issueTitle")}</label>
               <input
                 type="text"
                 required
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="e.g. Water Main Leak causing street flooding"
+                placeholder={t("titlePlaceholder")}
                 className="glass-input w-full px-4 py-3 rounded-xl text-sm"
               />
             </div>
 
             {/* Description */}
             <div className="space-y-2">
-              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Detailed Description</label>
+              <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider">{t("description")}</label>
               <textarea
                 required
                 rows={4}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                placeholder="Provide details about the issue size, hazard potential, and duration..."
+                placeholder={t("descPlaceholder")}
                 className="glass-input w-full px-4 py-3 rounded-xl text-sm resize-none"
               />
             </div>
@@ -178,11 +180,11 @@ export default function NewReport() {
             <div className="space-y-2">
               <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
                 <MapPin className="h-4 w-4 text-brand-primary" />
-                Select Pin Location on Map
+                {t("selectLocation")}
               </label>
               <MapSelector position={location} onChange={handleLocationChange} />
               <p className="text-[11px] text-gray-400 font-mono mt-1 bg-white/5 px-3 py-2 rounded-xl">
-                Location Address: {addressText}
+                {t("locationPrefix")}{addressText}
               </p>
             </div>
 
@@ -190,12 +192,12 @@ export default function NewReport() {
             <div className="space-y-3">
               <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
                 <ImageIcon className="h-4 w-4 text-brand-primary" />
-                Attach Photo evidence (Optional)
+                {t("attachPhotos")}
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <label className="flex flex-col items-center justify-center h-28 rounded-2xl border border-dashed border-white/10 hover:border-brand-primary/40 bg-white/5 hover:bg-white/10 cursor-pointer transition-all">
                   <Upload className="h-6 w-6 text-gray-400 mb-2" />
-                  <span className="text-xs text-gray-300">Click to Upload image</span>
+                  <span className="text-xs text-gray-300">{t("uploadImage")}</span>
                   <input
                     type="file"
                     accept="image/*"
@@ -224,7 +226,7 @@ export default function NewReport() {
               className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-brand-primary to-brand-secondary hover:brightness-105 text-white font-bold py-4 px-6 rounded-2xl shadow-xl shadow-brand-primary/20 hover:scale-[1.01] transition-all disabled:opacity-50"
             >
               <Sparkles className="h-4 w-4" />
-              <span>{loadingAI ? "Analyzing with Gemini AI..." : "Run AI Verification"}</span>
+              <span>{loadingAI ? t("analyzing") : t("runVerification")}</span>
             </button>
           </form>
         )}
@@ -238,23 +240,23 @@ export default function NewReport() {
                 className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white mb-4 bg-white/5 border border-white/10 px-3 py-1.5 rounded-lg transition-all"
               >
                 <ArrowLeft className="h-3.5 w-3.5" />
-                Go Back & Edit
+                {t("goBack")}
               </button>
               <h1 className="text-3xl font-extrabold text-white tracking-tight flex items-center gap-2">
                 <Sparkles className="h-6 w-6 text-brand-primary animate-pulse" />
-                Gemini Verification Analysis
+                {t("aiPreview")}
               </h1>
-              <p className="text-sm text-gray-400 mt-1">Review the AI summary, classification, and safety instructions before submitting.</p>
+              <p className="text-sm text-gray-400 mt-1">{t("aiPreviewSub")}</p>
             </div>
 
             {/* AI Summary Card */}
             <div className="glass-panel p-6 rounded-3xl space-y-4">
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-1.5">
                 <FileText className="h-4 w-4 text-brand-primary" />
-                AI Generated Summary
+                {t("aiGeneratedSummary")}
               </h3>
               <blockquote className="border-l-2 border-brand-primary pl-4 text-sm font-light italic leading-relaxed text-gray-200">
-                "{aiPreview.aiSummary}"
+                &quot;{aiPreview.aiSummary}&quot;
               </blockquote>
             </div>
 
@@ -262,25 +264,25 @@ export default function NewReport() {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {/* Category & Dept */}
               <div className="glass-panel p-6 rounded-3xl space-y-2">
-                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Classification & Department</h4>
+                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t("classification")}</h4>
                 <p className="text-sm font-bold text-white capitalize">{aiPreview.category.replace("_", " ")}</p>
-                <p className="text-xs text-gray-400 mt-1">Routed to: {aiPreview.assignedDepartment}</p>
+                <p className="text-xs text-gray-400 mt-1">{t("routedTo")}{aiPreview.assignedDepartment}</p>
               </div>
 
               {/* Severity & Crisis */}
               <div className="glass-panel p-6 rounded-3xl space-y-2">
-                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">Priority Metrics</h4>
+                <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-wider">{t("priorityMetrics")}</h4>
                 <div className="flex items-center gap-2 mt-1">
                   <span className={`text-xs font-bold px-2.5 py-1 rounded-lg uppercase border ${severityColors[aiPreview.severity]}`}>
-                    {aiPreview.severity} Severity
+                    {aiPreview.severity}
                   </span>
                   {aiPreview.crisisFlag && (
                     <span className="text-xs font-bold px-2.5 py-1 rounded-lg bg-brand-danger/20 text-brand-danger border border-brand-danger/30 uppercase animate-pulse">
-                      Crisis Level
+                      {t("crisisLevel")}
                     </span>
                   )}
                 </div>
-                <p className="text-[11px] text-gray-400">Calculated Priority Score: {aiPreview.priorityScore.toFixed(2)} / 1.00</p>
+                <p className="text-[11px] text-gray-400">{t("priorityScore")}{aiPreview.priorityScore.toFixed(2)} / 1.00</p>
               </div>
             </div>
 
@@ -288,7 +290,7 @@ export default function NewReport() {
             <div className="p-5 rounded-3xl bg-brand-warning/10 border border-brand-warning/20 flex gap-4">
               <AlertCircle className="h-6 w-6 text-brand-warning shrink-0 mt-0.5" />
               <div>
-                <h4 className="text-xs font-bold text-brand-warning uppercase tracking-wider">Gemini Safety Advice</h4>
+                <h4 className="text-xs font-bold text-brand-warning uppercase tracking-wider">{t("safetyAdvice")}</h4>
                 <p className="text-xs text-gray-300 mt-1 leading-relaxed font-light">{aiPreview.safetyInstructions}</p>
               </div>
             </div>
@@ -298,9 +300,9 @@ export default function NewReport() {
               <div className="p-5 rounded-3xl bg-brand-danger/10 border border-brand-danger/20 flex gap-4">
                 <ShieldAlert className="h-6 w-6 text-brand-danger shrink-0 mt-0.5 animate-pulse" />
                 <div>
-                  <h4 className="text-xs font-bold text-brand-danger uppercase tracking-wider">Duplicate Hazard Warning</h4>
+                  <h4 className="text-xs font-bold text-brand-danger uppercase tracking-wider">{t("duplicateWarning")}</h4>
                   <p className="text-xs text-gray-300 mt-1 leading-relaxed font-light">
-                    A report matching this description has been flagged within 100 meters. Submitting this will add your details as a community confirmation to report #{aiPreview.duplicateOf}.
+                    {t("duplicateDesc", { id: aiPreview.duplicateOf })}
                   </p>
                 </div>
               </div>
@@ -313,7 +315,7 @@ export default function NewReport() {
               className="w-full flex items-center justify-center gap-2 bg-brand-success hover:bg-brand-success/95 text-white font-bold py-4 px-6 rounded-2xl shadow-xl shadow-brand-success/20 hover:scale-[1.01] transition-all disabled:opacity-50"
             >
               <CheckCircle className="h-4 w-4" />
-              <span>{submitting ? "Publishing Report..." : "Verify & Publish Report"}</span>
+              <span>{submitting ? t("publishing") : t("publishReport")}</span>
             </button>
           </div>
         )}

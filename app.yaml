@@ -1,0 +1,11 @@
+runtime: nodejs20
+
+handlers:
+  - url: /(.*\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|webp|map|json))
+    static_files: out/\1
+    upload: out/(.*)
+    expiration: "365d"
+
+  - url: /(.*)
+    static_files: out/index.html
+    upload: out/index.html
