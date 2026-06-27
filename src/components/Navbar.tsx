@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { getAlerts, Alert } from "@/lib/dbService";
+import { getAlerts } from "@/lib/dbService";
 import { ShieldAlert, AlertTriangle, Map, LayoutDashboard, PlusCircle, User, LogOut, ChevronDown, Settings } from "lucide-react";
 import { useTranslations } from "next-intl";
 

@@ -5,7 +5,7 @@ import Link from "next/link";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
 import { getReports, getAlerts, upvoteReport, confirmReport, Report, Alert } from "@/lib/dbService";
-import { Search, Filter, ThumbsUp, MapPin, AlertTriangle, Clock, ShieldAlert, Sparkles, CheckCircle } from "lucide-react";
+import { Search, Filter, ThumbsUp, MapPin, AlertTriangle, Clock, Sparkles, CheckCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export default function Dashboard() {

@@ -28,7 +28,6 @@ import {
   History,
   CheckCircle,
   FileText,
-  User as UserIcon,
   Send,
 } from "lucide-react";
 
@@ -273,7 +272,7 @@ function ReportDetailsContent() {
                   {t("aiSummary")}
                 </h3>
                 <p className="text-sm font-light text-gray-200 italic leading-relaxed">
-                  "{report.aiSummary}"
+                  &quot;{report.aiSummary}&quot;
                 </p>
                 <div className="pt-2 flex items-center gap-2 text-xs text-gray-400">
                   <Briefcase className="h-4 w-4 text-brand-primary" />
@@ -393,7 +392,7 @@ function ReportDetailsContent() {
                         <p className="text-[10px] text-gray-400 mt-0.5">{new Date(h.timestamp).toLocaleDateString()}</p>
                         {h.note && (
                           <p className="text-[11px] text-gray-300 mt-1 font-light italic">
-                            "{h.note}"
+                            &quot;{h.note}&quot;
                           </p>
                         )}
                       </div>
@@ -406,7 +405,7 @@ function ReportDetailsContent() {
                       <div className="pl-2">
                         <span className="text-xs font-bold text-white uppercase tracking-wider">{t("reportFiled")}</span>
                         <p className="text-[10px] text-gray-400 mt-0.5">{new Date(report.createdAt).toLocaleDateString()}</p>
-                        <p className="text-[11px] text-gray-300 mt-1 font-light italic">"{t("reportCreated")}"</p>
+                        <p className="text-[11px] text-gray-300 mt-1 font-light italic">&quot;{t("reportCreated")}&quot;</p>
                       </div>
                     </div>
 

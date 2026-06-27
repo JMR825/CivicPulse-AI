@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import { getAlerts, Alert } from "@/lib/dbService";
-import { AlertTriangle, Clock, ShieldAlert, Sparkles, BellRing, BellOff, Volume2 } from "lucide-react";
+import { Clock, ShieldAlert, Sparkles, BellRing, BellOff, Volume2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 export default function AlertsPage() {

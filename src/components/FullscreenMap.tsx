@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import L from "leaflet";
 import Link from "next/link";
 import { Report } from "@/lib/dbService";
-import { Navigation, Loader2 } from "lucide-react";
+import { Navigation, Loader2, Box, Layers } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 // Helper to color pins depending on severity
@@ -53,6 +53,7 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
   const [zoom, setZoom] = useState(13);
   const [userLocation, setUserLocation] = useState<[number, number] | null>(null);
   const [loadingGps, setLoadingGps] = useState(false);
+  const [is3D, setIs3D] = useState(true);
 
   useEffect(() => {
     if (reports.length > 0) {
@@ -84,7 +85,7 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
   };
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div className="relative h-full w-full">
       
       {/* Map Action Overlays */}
       <div className="absolute top-3 right-3 z-[1000] flex flex-col gap-2">
@@ -101,13 +102,24 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
           )}
           <span>{loadingGps ? t("locating") : t("locateMe")}</span>
         </button>
+
+        {/* 2D/3D Toggle */}
+        <button
+          onClick={() => setIs3D(!is3D)}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-brand-card/85 border border-white/10 hover:border-brand-primary/40 text-gray-300 hover:text-white backdrop-blur-md transition-all"
+        >
+          {is3D ? (
+            <Layers className="h-3.5 w-3.5 text-brand-primary" />
+          ) : (
+            <Box className="h-3.5 w-3.5 text-brand-primary" />
+          )}
+          <span>{is3D ? "2D" : "3D"}</span>
+        </button>
       </div>
 
       <div
         className="h-full w-full transition-all duration-500 origin-bottom"
-        style={{
-          transform: "perspective(900px) rotateX(42deg) scale(1.15)",
-        }}
+        style={is3D ? { transform: "rotateX(48deg) scale(1.2)", transformStyle: "preserve-3d", perspective: "1200px" } : {}}
       >
         <MapContainer
           center={center}
@@ -162,7 +174,7 @@ export default function FullscreenMap({ reports }: FullscreenMapProps) {
                     
                     {report.aiSummary && (
                       <p className="text-[10px] text-gray-400 line-clamp-2 leading-relaxed italic">
-                        "{report.aiSummary}"
+                        &quot;{report.aiSummary}&quot;
                       </p>
                     )}
 

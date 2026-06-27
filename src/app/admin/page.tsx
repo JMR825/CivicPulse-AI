@@ -24,9 +24,7 @@ import {
   CheckCircle,
   XCircle,
   Briefcase,
-  AlertCircle,
   GitMerge,
-  Eye,
   RefreshCw,
   Clock,
   Sparkles,
@@ -317,7 +315,7 @@ export default function AdminConsole() {
                     {report.aiSummary && (
                       <p className="text-[11px] text-brand-primary mt-2 flex items-center gap-1">
                         <Sparkles className="h-3.5 w-3.5" />
-                        <span>AI Summarized: "{report.aiSummary}"</span>
+                        <span>AI Summarized: &quot;{report.aiSummary}&quot;</span>
                       </p>
                     )}
                   </div>

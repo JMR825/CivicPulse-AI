@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Navbar from "@/components/Navbar";
-import { getReports, getAlerts, Report, Alert } from "@/lib/dbService";
+import { getReports, getAlerts, Alert } from "@/lib/dbService";
 import { ShieldAlert, Users, Award, Landmark, ArrowRight, AlertTriangle, CheckCircle2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 

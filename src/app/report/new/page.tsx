@@ -5,25 +5,24 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import { useAuth } from "@/context/AuthContext";
-import { createReport, Report } from "@/lib/dbService";
+import { createReport } from "@/lib/dbService";
 import { analyzeReport } from "@/lib/gemini";
 import { useTranslations } from "next-intl";
 import { Sparkles, MapPin, Upload, ArrowLeft, ArrowRight, CheckCircle, ShieldAlert, AlertCircle, FileText, Image as ImageIcon } from "lucide-react";
+
+const MapSelector = dynamic(() => import("@/components/MapSelector"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-64 w-full rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-xs text-gray-500">
+      Loading...
+    </div>
+  ),
+});
 
 export default function NewReport() {
   const { user } = useAuth();
   const router = useRouter();
   const t = useTranslations("newReport");
-
-  // Load MapSelector dynamically to prevent SSR errors
-  const MapSelector = dynamic(() => import("@/components/MapSelector"), {
-    ssr: false,
-    loading: () => (
-      <div className="h-64 w-full rounded-2xl bg-white/5 border border-white/5 flex items-center justify-center text-xs text-gray-500">
-        {t("loading")}
-      </div>
-    ),
-  });
 
   // Multi-step state: 1 = Form details, 2 = AI Preview
   const [step, setStep] = useState(1);
