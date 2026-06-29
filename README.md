@@ -30,6 +30,7 @@ The Challenge: Municipalities struggle to manage, categorize, and prioritize a h
 | Auth | Firebase Auth (Email/Password, Google OAuth) |
 | Maps | Leaflet + react-leaflet with Google satellite tiles |
 | Deploy | Firebase Hosting, Docker |
+| AI Agent | Antigravity |
 
 ## Getting Started
 
