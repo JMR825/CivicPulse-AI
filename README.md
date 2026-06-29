@@ -7,7 +7,7 @@ Google for Developers Challenge Track: Community Hero - Hyperlocal Problem Solve
 
 The Challenge: Municipalities struggle to manage, categorize, and prioritize a high volume of citizen-reported hazards (potholes, fires, leaks). Disconnected systems cause slow emergency routing, duplicate work on identical issues, and a lack of real-time communication during localized crises.
 
-## Key Features
+## Project Details
 
 - **AI-Powered Report Analysis** — Gemini 2.5 Flash auto-categorizes reports, assigns severity, priority scores, and routes to the right department
 - **Smart Duplicate Detection** — AI semantic comparison + proximity-based detection to merge duplicate reports
@@ -124,6 +124,9 @@ src/
 4. **Admin/Moderator reviews** — Verifies, marks in-progress, resolves, rejects, or merges duplicates
 5. **Crisis alerts** — Admins broadcast emergency alerts with safety instructions to all users
 6. **Community engagement** — Citizens upvote, confirm, and comment on reports
+
+## Toolstack
+Next.js 16, React 19, Tailwind CSS v4, Google Gemini 2.5 Flash, Firebase Firestore, Firebase Auth, Leaflet Maps, Docker.
 
 ## License
 
