@@ -2,9 +2,10 @@
 
 An AI-powered civic crisis reporting and resolution platform that connects citizens with municipal governments. Built with Next.js, Firebase, and Google Gemini AI.
 
-## What It Does
+# Problem Statement
+Google for Developers Challenge Track: Community Hero - Hyperlocal Problem Solver
 
-Citizens report local hazards (potholes, water leaks, fires, gas leaks, etc.) with photos and GPS coordinates. Google Gemini AI automatically categorizes, summarizes, prioritizes, detects duplicates, and routes reports to the correct municipal departments. Moderators and admins review, verify, merge, and resolve reports. Crisis alerts can be broadcast system-wide.
+The Challenge: Municipalities struggle to manage, categorize, and prioritize a high volume of citizen-reported hazards (potholes, fires, leaks). Disconnected systems cause slow emergency routing, duplicate work on identical issues, and a lack of real-time communication during localized crises.
 
 ## Key Features
 
